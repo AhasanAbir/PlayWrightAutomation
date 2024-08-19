@@ -28,7 +28,7 @@ test('Browser Context Playwright test' , async ({browser}) =>
 });
 
 
-test.only('UI Controls', async ({page}) =>
+test('UI Controls', async ({page}) =>
 {
         await page.goto("https://rahulshettyacademy.com/loginpagePractise/");
         const userName = page.locator('#username');
@@ -47,17 +47,17 @@ test.only('UI Controls', async ({page}) =>
         await expect(documentLink).toHaveAttribute("class", "blinkingText");
 });
 
-test.only ('Child windows handle', async ({page})=>
+test.only ('Child windows handle', async ({browser})=>
 {
         const context = await browser.newContext();
         const page = await context.newPage();
         await page.goto("https://rahulshettyacademy.com/loginpagePractise/");
         const documentLink = page.locator("[href*='documents-request']");
         
-        const newPage = await Promise.all([
-                context.waitForEvent('page');
-                documentLink.click();
+        const [newPage] = await Promise.all([
+                context.waitForEvent('page'),
+                documentLink.click(),
         ])
-        
-        //git test
+        const text = await newPage.locator(".red").textContent();
+        console.log(text);
 });
